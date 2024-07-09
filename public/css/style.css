@@ -2,6 +2,7 @@ body{
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
+    height: 100%;
 }
 *{
     box-sizing: border-box;
@@ -15,7 +16,7 @@ a{
 }
 
 main{
-    height: 100vh;
+    height: 100vw;
     width: 100vw;
     background-color: #053B50;
     padding: 10px;
@@ -61,6 +62,7 @@ main{
     display: flex;
     flex-direction: column;
     gap: 20px;
+    height: 100%;
 }
 .inputBox form{
     display: flex;
@@ -87,6 +89,7 @@ main{
     font-size: 1rem;
     cursor: pointer;
 }
+
 .innerBox input[type="text"]{
     padding: 5px;
     width: 100%;

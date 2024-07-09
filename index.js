@@ -43,6 +43,5 @@ app.post("/edit", (req, res) => {
 });
 
 app.listen(port, () => {
-    isServerStarted = 1;
     console.log(`Server listening on port ${port}`);
 });
