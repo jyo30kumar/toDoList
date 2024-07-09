@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <link rel="stylesheet" href="fonts/font.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <main>
+        
+        <section>
+            <div class="top-site">
+                <div class="site-button">
+                <a href="/reset" onclick="clearLocalStorage()">New Work</a>
+                </div>
+            </div>
+        </section>
+        <div class="container">
+            <header>
+                <h1>ToDo List</h1>
+            </header>
+            
+            <section class="toDoContainer">
+                <div class="inputBox">
+                    <form action="/submit" method="POST" onsubmit="storeToDoTitle()">
+                        <input type="text" name="addTask" id="addTask" placeholder="Type Here!" autocomplete="false" autofocus="true"> 
+                        <button type="submit">Add</button>
+                    </form>
+                </div>
+                
+
+                <% items.forEach(item=>{ %>
+                <div class="innerBox">
+                    <div class="newItem" id="newItem">
+                        <form class="innerForm01" id="innerForm01">
+                            <input type="checkbox" onclick="completeTask('<%= item.id%>')" id="check<%= item.id%>" value="<%= item.id%>">
+                            <p id="title<%= item.id%>"><%= item.title%></p>
+                            <input type="hidden" value="<%= item.id%>" id="ids">
+                            <button type="submit" id="edit<%= item.id%>" onclick="handler(event, '<%= item.id%>')">
+                            <i class="fa fa-pencil" style="font-size:20px"></i>
+                            </button>
+                        </form>
+                        <form action="/edit"  class="innerForm02" method="post" id="innerForm02">
+                            <input type="hidden" name="updatedItemId" value="<%= item.id%>">
+                            <input type="text" name="updatedItemTitle" id="input<%= item.id%>" value="<%= item.title%>" hidden="true">
+                            <button id="done<%= item.id%>" type="submit" hidden><i class="fa fa-check" style="font-size:20px"></i></button>
+                        </form> 
+                    </div>
+                </div>
+                <% }) %>
+               
+            </section>
+        </div>
+    </main>
+    <script>
+
+        // Check stored flag and update UI
+        function checkStoredFlag(id) {
+            let element = document.getElementById('title' + id);
+            let check = document.getElementById('check' + id);
+            let storedFlag = localStorage.getItem('storeFlagValue_' + id);
+            if (storedFlag === '1') {
+                element.classList.add('line-through');
+                check.checked = true;
+            }
+        }
+
+        // Complete task and update local storage
+        function completeTask(id) {
+            let element = document.getElementById('title' + id);
+            let check = document.getElementById('check' + id);
+            if (check.checked) {
+                element.classList.add('line-through');
+                localStorage.setItem('storeFlagValue_' + id, '1');
+            } else {
+                element.classList.remove('line-through');
+                localStorage.removeItem('storeFlagValue_' + id);
+            }
+        }
+        function clearLocalStorage(){
+            localStorage.clear();
+        }
+    
+        // Handle task editing
+        function handler(event, id) {
+            event.preventDefault();
+            document.getElementById('title' + id).setAttribute("hidden", true);
+            document.getElementById('edit' + id).setAttribute("hidden", true);
+            document.getElementById('check' + id).setAttribute("hidden", true);
+            document.getElementById('input' + id).removeAttribute("hidden");
+            document.getElementById('done' + id).removeAttribute("hidden");
+            return false;
+        }
+
+         // Call checkStoredFlag for each item after the page is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            <% items.forEach(item => { %>
+            checkStoredFlag('<%= item.id %>');
+            <% }) %>
+        });
+    </script>
+    
+</body>
+</html>
